@@ -2,23 +2,23 @@
 
 import unittest
 
-from sqlalchemy_jsonapi.unittests.main import db
+from sqlalchemy_jsonapi.unittests.models import Base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 
 class SqlalchemyJsonapiTestCase(unittest.TestCase):
     """Base test case for all tests."""
 
     def setUp(self, *args, **kwargs):
-        """Update the app config for testing.
-
-        As future testcases require more database insertions prior to testing,
-        we will need to perhaps use unittests class methods.
-        """
+        """Configure sqlalchemy and session."""
         super(SqlalchemyJsonapiTestCase, self).setUp(*args, **kwargs)
-        db.create_all()
+        self.engine = create_engine('sqlite://')
+        Session = sessionmaker(bind=self.engine)
+        self.session = Session()
+        Base.metadata.create_all(self.engine)
 
     def tearDown(self, *args, **kwargs):
-        """Reset the app config."""
+        """Reset the sqlalchemy engine."""
         super(SqlalchemyJsonapiTestCase, self).tearDown(*args, **kwargs)
-        db.session.remove()
-        db.drop_all()
+        Base.metadata.drop_all(self.engine)

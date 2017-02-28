@@ -1,24 +1,22 @@
-""""Model file used for unit testing.
+"""Model file for unit testing."""
 
-More elaborate models will need to be added
-as more tests are added. For example when testing
-relationships and permissions.
-"""
-
-
-from sqlalchemy_jsonapi.unittests.main import db
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy_jsonapi import JSONAPI
 
 
-class User(db.Model):
+Base = declarative_base()
+
+
+class User(Base):
     """Simple user model."""
 
     __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    first = Column(String(50), nullable=False)
+    last = Column(String(50), nullable=False)
 
-    id = db.Column(db.Integer, primary_key=True)
-    first = db.Column(db.String(50), nullable=False)
-    last = db.Column(db.String(50), nullable=False)
 
-
-serializer = JSONAPI(db.Model)
+serializer = JSONAPI(Base)

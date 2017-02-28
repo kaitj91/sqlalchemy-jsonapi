@@ -1,7 +1,7 @@
 """Test for serializer's post_collection."""
 
 from sqlalchemy_jsonapi.unittests.utils import testcases
-from sqlalchemy_jsonapi.unittests.main import db
+#from sqlalchemy_jsonapi.unittests.main import db
 from sqlalchemy_jsonapi.unittests.models import serializer
 
 
@@ -19,7 +19,9 @@ class PostCollection(testcases.SqlalchemyJsonapiTestCase):
                 }
             }
         }
-        response = serializer.post_collection(db.session, payload, 'users')
+        print(dir(self.session))
+        print(type(self.session))
+        response = serializer.post_collection(self.session, payload, 'users')
 
         expected_response = {
             'data': {
