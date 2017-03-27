@@ -1,5 +1,35 @@
 from uuid import uuid4
 
+class BaseCustomError(Exception):
+    @property
+    def data(self):
+        return {
+            'errors': [{
+                'code': self.code,
+                'status': self.status_code,
+                'title': self.title,
+                'detail': self.detail,
+                'source': {
+                    'pointer': self.pointer,
+                    'parameter': self.parameter
+                }
+            }],
+            'jsonapi': {
+                'version': '1.0'
+            },
+            'meta': {
+                'sqlalchemy_jsonapi_version': '4.0.9'
+            }
+        }
+
+class CustomError(BaseCustomError):
+    def __init__(self, code, status, title, detail, pointer, parameter):
+        self.code = code,
+        self.status = status,
+        self.title = title,
+        self.detail = detail,
+        self.pointer = pointer
+        self.parameter = parameter
 
 class BaseError(Exception):
     @property
