@@ -23,7 +23,7 @@ class PersonSerializer(serializer.Serializer):
     model = Person  # The model mapping to the serializer.
     dasherize = True  # Specify model names such as first_name to be serialized as 'first-name'
 ```
-How you can use your newly defined serializer:
+You can use your newly defined serializer to retrieve a collection of resources or a single resource. 
 ```
 # Some GET view in a web framework such as Flask
 def get_resource(db_id):
@@ -31,5 +31,15 @@ def get_resource(db_id):
     some_sqlalchemy_model_resource = db.query(Person).get(db_id)
     person_serializer = PersonSerializer()
     data = person_serializer.serialize(some_sqlalchemy_model_resource)
+    return flask.jsonify(data), status_code
+```
+
+```
+# Some GET view in a web framework such as Flask
+def get_collection():
+    # Fetch some resources from database.
+    some_sqlalchemy_model_collection = db.query(Person)
+    person_serializer = PersonSerializer()
+    data = person_serializer.serialize(some_sqlalchemy_model_collection)
     return flask.jsonify(data), status_code
 ```
